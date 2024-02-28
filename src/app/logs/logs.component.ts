@@ -21,7 +21,7 @@ export class LogsComponent implements OnInit {
 
     this.http
     .get<GetAllMessages>(
-      `/api/logs/messages/${this.chatname}/${this.username}/${arg0}`
+      `https://assasinos.me/api/logs/messages/${this.chatname}/${this.username}/${arg0}`
     )
     .subscribe({
       next: async (result) => {
@@ -90,7 +90,7 @@ export class LogsComponent implements OnInit {
 
     this.http
       .get<GetAllActivityWeekResponses>(
-        `/api/logs/user/${this.chatname}/${this.username}`
+        `https://assasinos.me/api/logs/user/${this.chatname}/${this.username}`
       )
       .subscribe({
         next: (result) => {

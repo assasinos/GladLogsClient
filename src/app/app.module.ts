@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { LogsComponent } from './logs/logs.component';
 import { HeaderComponent } from './header/header.component';
-import { MessagesComponent } from './messages/messages.component';
 import { MessageComponent } from './message/message.component';
 
 @NgModule({
@@ -16,7 +15,6 @@ import { MessageComponent } from './message/message.component';
     HomeComponent,
     LogsComponent,
     HeaderComponent,
-    MessagesComponent,
     MessageComponent
   ],
   imports: [
