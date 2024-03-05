@@ -7,6 +7,8 @@ import { MessageComponent } from '../message/message.component';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from '../app.component';
 import { DataSharingService } from '../services/data-sharing.service';
+import { EmoteDictionary } from 'twitch-emotes-lib/dist/types/Emote';
+import { EmoteClient } from 'twitch-emotes-lib';
 
 @Component({
   selector: 'app-logs',
@@ -45,6 +47,13 @@ export class LogsComponent implements OnInit {
 
         componentRef.setInput('messages',messages);
         componentRef.setInput('username',this.username);
+
+        //Wait 2 seconds if messages wasn't loaded successfully
+        if(!this.emotes){
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+        }
+        componentRef.setInput('emotes',this.emotes);
+
         this.ref.attachView(componentRef.hostView);
         componentRef.changeDetectorRef.detectChanges();
 
@@ -71,11 +80,14 @@ export class LogsComponent implements OnInit {
 
   username: string = '';
   chatname: string = '';
+  
+  emotes : EmoteDictionary | null = null;
+
 
   activeWeeks: GetAllActivityWeekResponses = { weeks: [] };
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private ref : ApplicationRef, private dataService: DataSharingService) {}
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     //Get params
     this.route.params.subscribe({
       next: (value) => {
@@ -101,5 +113,9 @@ export class LogsComponent implements OnInit {
           console.error(error);
         },
       });
+
+
+      const emoteClient = new EmoteClient(this.chatname);
+      this.emotes = await emoteClient.GetAllEmotesDictionary();
   }
 }
