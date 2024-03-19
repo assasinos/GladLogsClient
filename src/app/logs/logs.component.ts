@@ -115,11 +115,6 @@ export class LogsComponent implements OnInit {
 
 
 
-      //Emotes shouldn't be loaded if there are no active weeks
-      if(this.activeWeeks === null) {
-        return;
-      }
-
       //Loading Emotes each time chat is checked seems to be unnecessary and slow
       //So I think storing these in a sessionStorage is a good idea
       //LocalStorage would be a good idea if emotes would not change, but they do :(
