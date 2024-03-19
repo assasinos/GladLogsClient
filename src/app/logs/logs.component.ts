@@ -72,9 +72,9 @@ export class LogsComponent implements OnInit {
     startDate.setDate(startDate.getDate() - arg0 * 7);
 
     const endDate: Date = new Date(startDate);
-    endDate.setDate(endDate.getDate() - 7);
+    endDate.setDate(endDate.getDate() + 7);
 
-    return `${startDate.getDate()}/${startDate.getMonth()} - ${endDate.getDate()}/${endDate.getMonth()}`;
+    return `${endDate.getDate()}/${endDate.getMonth()} - ${startDate.getDate()}/${startDate.getMonth()}`;
   }
 
 
