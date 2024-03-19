@@ -40,8 +40,12 @@ GetMessageWithEmotes(message:string):string{
 
 
 GetDate(arg0: Date) {
+  //Convert to proper date format
   arg0 = new Date(arg0);
-  return `${arg0.toLocaleString("pl-PL")}`;
+
+  //Date is UTC, so convert to local time
+  arg0 = new Date(Date.UTC(arg0.getFullYear(), arg0.getMonth(), arg0.getDate(), arg0.getHours(), arg0.getMinutes(), arg0.getSeconds()));
+  return `${arg0.toLocaleString()}`;
 }
 
   @Input() 
