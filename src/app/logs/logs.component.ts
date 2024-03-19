@@ -84,7 +84,7 @@ export class LogsComponent implements OnInit {
   emotes : EmoteDictionary | null = null;
 
 
-  activeWeeks: GetAllActivityWeekResponses = { weeks: [] };
+  activeWeeks: GetAllActivityWeekResponses | null = null;
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private ref : ApplicationRef, private dataService: DataSharingService) {}
   async ngOnInit(): Promise<void> {
@@ -99,7 +99,6 @@ export class LogsComponent implements OnInit {
     });
 
     //Get user active weeks
-
     this.http
       .get<GetAllActivityWeekResponses>(
         `https://assasinos.me/api/logs/user/${this.chatname}/${this.username}`
