@@ -69,12 +69,12 @@ export class LogsComponent implements OnInit {
 
   GetDate(arg0: number) {
     const startDate: Date = new Date(Date.now());
-    startDate.setDate(startDate.getDate() - arg0 * 7);
+    startDate.setDate(startDate.getDate() - arg0 * 7 -2);
 
     const endDate: Date = new Date(startDate);
-    endDate.setDate(endDate.getDate() - 7);
+    endDate.setDate(endDate.getDate() + 7);
 
-    return `${startDate.getDate()}/${startDate.getMonth()} - ${endDate.getDate()}/${endDate.getMonth()}`;
+    return `${endDate.getDate() -1}/${endDate.getMonth()} - ${startDate.getDate()}/${startDate.getMonth()}`;
   }
 
 
@@ -84,7 +84,7 @@ export class LogsComponent implements OnInit {
   emotes : EmoteDictionary | null = null;
 
 
-  activeWeeks: GetAllActivityWeekResponses = { weeks: [] };
+  activeWeeks: GetAllActivityWeekResponses | null = null;
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private ref : ApplicationRef, private dataService: DataSharingService) {}
   async ngOnInit(): Promise<void> {
@@ -99,7 +99,6 @@ export class LogsComponent implements OnInit {
     });
 
     //Get user active weeks
-
     this.http
       .get<GetAllActivityWeekResponses>(
         `https://assasinos.me/api/logs/user/${this.chatname}/${this.username}`
@@ -115,7 +114,23 @@ export class LogsComponent implements OnInit {
       });
 
 
-      const emoteClient = new EmoteClient(this.chatname);
-      this.emotes = await emoteClient.GetAllEmotesDictionary();
+
+      //Emotes shouldn't be loaded if there are no active weeks
+      if(this.activeWeeks === null) {
+        return;
+      }
+
+      //Loading Emotes each time chat is checked seems to be unnecessary and slow
+      //So I think storing these in a sessionStorage is a good idea
+      //LocalStorage would be a good idea if emotes would not change, but they do :(
+      if(sessionStorage.getItem(`emotes.${this.chatname}`) === null){
+        const emoteClient = new EmoteClient(this.chatname);
+        this.emotes = await emoteClient.GetAllEmotesDictionary();
+        sessionStorage.setItem(`emotes.${this.chatname}`, JSON.stringify(this.emotes));
+        return;
+      }
+
+      //Get emotes from session storage
+      this.emotes = JSON.parse(sessionStorage.getItem(`emotes.${this.chatname}`) as string);
   }
 }

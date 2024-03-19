@@ -1,22 +1,22 @@
 <div class="flex flex-col gap-3 bg-gray-950 p-4 w-full">
 
     @if (messages.messages !== null ) {
-    @for (message of messages.messages; track $index)
-    {
-    <div class="flex flex-row gap-2 text-start content-center items-center">
-        <span class="font-thin text-sm text-nowrap">{{GetDate(message.timestamp)}}</span>
-        <span>{{username}}:</span>
-        @if (!emotes) {
-        <!-- couldn't fetch emotes -->
-        <span>{{message.message}}</span>
-
+        @for (message of messages.messages; track $index)
+        {
+        <div class="flex flex-row gap-2 text-start content-center items-center">
+            <span class="font-thin text-sm text-nowrap">{{GetDate(message.timestamp)}}</span>
+            <span class="text-green-400">{{username}}:</span>
+            @if (!emotes) {
+            <!-- couldn't fetch emotes -->
+            <span>{{message.message}}</span>
+            
+            }
+            @else {
+            <span class="inline-block md:flex md:flex-row md:items-center flex-nowrap items-center text-start"
+                [innerHTML]="GetMessageWithEmotes(message.message)"></span>
+            
+            }
+        </div>
         }
-        @else {
-        <span class="inline-block md:flex md:flex-row md:items-center flex-nowrap"
-            [innerHTML]="GetMessageWithEmotes(message.message)"></span>
-
-        }
-    </div>
-    }
     }
 </div>

@@ -71,8 +71,8 @@ export class HeaderComponent implements OnInit  {
 
 
     //Goto the userlogs page
-
-    this.router.navigate(['/logs', chatname, username]).then(() =>
+    //Usernames are stored as lowercase letters, same as twitch
+    this.router.navigate(['/logs', chatname, username.toLowerCase()]).then(() =>
     {
       window.location.reload();
     });
