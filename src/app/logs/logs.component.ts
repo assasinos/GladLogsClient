@@ -67,7 +67,7 @@ export class LogsComponent implements OnInit {
 
   }
 
-  GetDate(arg0: number) {
+  GetDate(arg0: number) :string {
     const startDate: Date = new Date(Date.now());
     startDate.setDate(startDate.getDate() - arg0 * 7 -2);
 
@@ -85,6 +85,41 @@ export class LogsComponent implements OnInit {
 
 
   activeWeeks: GetAllActivityWeekResponses | null = null;
+
+
+  GetEmoteDictLenght() : number {
+    if(this.emotes){
+      return Object.keys(this.emotes).length;
+    }
+    return -1;
+  
+  }; 
+
+
+  DismissEmoteToast() {
+    //This will make emotes null so GetEmoteDictLenght will return -1
+    this.emotes = null;
+  }
+
+
+  async GetEmotes(){
+      //Loading Emotes each time chat is checked seems to be unnecessary and slow
+      //So I think storing these in a sessionStorage is a good idea
+      //LocalStorage would be a good idea if emotes would not change, but they do :(
+        if(sessionStorage.getItem(`emotes.${this.chatname}`) === null){
+          const emoteClient = new EmoteClient(this.chatname);
+          this.emotes = await emoteClient.GetAllEmotesDictionary();
+          if(this.GetEmoteDictLenght() === 0){
+            return;
+          }
+          sessionStorage.setItem(`emotes.${this.chatname}`, JSON.stringify(this.emotes));
+          return;
+        }
+        //Get emotes from session storage
+        this.emotes = JSON.parse(sessionStorage.getItem(`emotes.${this.chatname}`) as string);
+  }
+
+
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private ref : ApplicationRef, private dataService: DataSharingService) {}
   async ngOnInit(): Promise<void> {
@@ -113,24 +148,6 @@ export class LogsComponent implements OnInit {
         },
       });
 
-
-
-      //Emotes shouldn't be loaded if there are no active weeks
-      if(this.activeWeeks === null) {
-        return;
-      }
-
-      //Loading Emotes each time chat is checked seems to be unnecessary and slow
-      //So I think storing these in a sessionStorage is a good idea
-      //LocalStorage would be a good idea if emotes would not change, but they do :(
-      if(sessionStorage.getItem(`emotes.${this.chatname}`) === null){
-        const emoteClient = new EmoteClient(this.chatname);
-        this.emotes = await emoteClient.GetAllEmotesDictionary();
-        sessionStorage.setItem(`emotes.${this.chatname}`, JSON.stringify(this.emotes));
-        return;
-      }
-
-      //Get emotes from session storage
-      this.emotes = JSON.parse(sessionStorage.getItem(`emotes.${this.chatname}`) as string);
+      await this.GetEmotes();
   }
 }
