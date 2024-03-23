@@ -11,7 +11,9 @@ export class DataSharingService {
   private usernameSubject = new BehaviorSubject<string>('');
   username$: Observable<string> = this.usernameSubject.asObservable();
 
-  updateValues(chatname: string, username: string) {
+  public hostname: string = 'https://assasinos.me';
+  
+  updateUserValues(chatname: string, username: string) {
     this.chatnameSubject.next(chatname);
     this.usernameSubject.next(username);
   }

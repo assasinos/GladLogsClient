@@ -23,7 +23,7 @@ export class LogsComponent implements OnInit {
 
     this.http
     .get<GetAllMessages>(
-      `https://assasinos.me/api/logs/messages/${this.chatname}/${this.username}/${arg0}`
+      `${this.dataService.hostname}/api/logs/messages/${this.chatname}/${this.username}/${arg0}`
     )
     .subscribe({
       next: async (result) => {
@@ -126,7 +126,7 @@ export class LogsComponent implements OnInit {
     //Get params
     this.route.params.subscribe({
       next: (value) => {
-        this.dataService.updateValues(value['chat'], value['nickname']);
+        this.dataService.updateUserValues(value['chat'], value['nickname']);
         this.chatname = value['chat'];
         this.username = value['nickname'];
       },
@@ -136,7 +136,7 @@ export class LogsComponent implements OnInit {
     //Get user active weeks
     this.http
       .get<GetAllActivityWeekResponses>(
-        `https://assasinos.me/api/logs/user/${this.chatname}/${this.username}`
+        `${this.dataService.hostname}/api/logs/user/${this.chatname}/${this.username}`
       )
       .subscribe({
         next: (result) => {
