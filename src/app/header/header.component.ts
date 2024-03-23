@@ -39,8 +39,7 @@ export class HeaderComponent implements OnInit  {
     
   }
   getChatNames(){
-
-    this.http.get<GetAllChatsResponse>('https://assasinos.me/api/logs/chats').subscribe(
+    this.http.get<GetAllChatsResponse>(`${this.dataService.hostname}/api/logs/chats`).subscribe(
       {
         next: (value) => {
           this.chats = value;
