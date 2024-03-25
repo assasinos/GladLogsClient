@@ -9,6 +9,9 @@ import { AppComponent } from '../app.component';
 import { DataSharingService } from '../services/data-sharing.service';
 import { EmoteDictionary } from 'twitch-emotes-lib/dist/types/Emote';
 import { EmoteClient } from 'twitch-emotes-lib';
+import { DateTime, Duration } from "luxon";
+
+
 
 @Component({
   selector: 'app-logs',
@@ -67,14 +70,20 @@ export class LogsComponent implements OnInit {
 
   }
 
-  GetDate(arg0: number) :string {
-    const startDate: Date = new Date(Date.now());
-    startDate.setDate(startDate.getDate() - arg0 * 7 -2);
+  GetDate(arg0: number) : string {
+    const now = DateTime.now();
+    const week = Duration.fromObject({ days: (-7 * arg0) -1 });
 
-    const endDate: Date = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 7);
 
-    return `${endDate.getDate() -1}/${endDate.getMonth()} - ${startDate.getDate()}/${startDate.getMonth()}`;
+    //Get current Week number
+    const weekDate = DateTime.fromFormat(`${now.weekNumber}`,"WW").startOf('week');
+
+    const startDate :DateTime  = weekDate.plus(week);
+    const endDate : DateTime = weekDate.plus(week).plus(Duration.fromObject({ days: 6 }));
+
+    return `${endDate.day}/${endDate.month} - ${startDate.day}/${startDate.month}`;
+
+    
   }
 
 
