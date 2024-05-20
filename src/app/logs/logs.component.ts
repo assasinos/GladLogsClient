@@ -77,7 +77,6 @@ export class LogsComponent implements OnInit {
 
     //Get current Week number
     const weekDate = DateTime.fromFormat(`${now.weekNumber}`,"WW").startOf('week');
-    console.log(weekDate.toString());
 
     const startDate :DateTime  = weekDate.plus(week);
     const endDate : DateTime = weekDate.plus(week).plus(Duration.fromObject({ days: 6 }));
@@ -157,6 +156,7 @@ export class LogsComponent implements OnInit {
           console.error(error);
         },
       });
+
 
       await this.GetEmotes();
   }
